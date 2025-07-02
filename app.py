@@ -1,33 +1,34 @@
 import streamlit as st
-from openai import OpenAI
 
-# Load API Key from Streamlit Secrets
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+st.title("🤖 AI Freelancer Coach – Onboarding & Campaign Support (Demo Mode)")
 
-system_prompt = """
-You are an AI-powered Freelance Media Buyer Coach for a PPC Arbitrage business.
-
-You help freelancers with:
-- Onboarding questions
-- Campaign optimization tips
-- PPC concepts like RPC, CPC, CTR
-- Real-time tactical campaign advice
-
-Be clear, concise, and actionable. Focus on steps freelancers can take next.
+# Hardcoded Q&A Dictionary
+demo_responses = {
+    "how do i set up my first ppc campaign?": """
+1. Select your campaign objective (traffic, conversions, etc.)
+2. Choose target audience and geo locations.
+3. Select high-RPC keywords.
+4. Set your daily budget and bids.
+5. Create engaging ad creatives.
+6. Launch and monitor performance in Babkee.
+""",
+    "my rpc is low. what should i do?": """
+- Review your CPC and scrub rate.
+- Optimize for better-performing keywords.
+- Refresh ad creatives.
+- Check for low-quality publisher placements.
+- Monitor performance in daily reports.
+""",
+    "what is scrub rate?": """
+Scrub Rate measures the percentage of ad clicks that get filtered out due to poor quality traffic or invalid clicks. High scrub rate often signals poor traffic sources.
 """
+}
 
-st.title("🤖 AI Freelancer Coach – Onboarding & Campaign Support")
-
-user_input = st.text_input("Ask your question:")
+user_input = st.text_input("Ask your onboarding or campaign question:")
 
 if user_input:
-    with st.spinner("Thinking..."):
-        chat_response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_input}
-            ]
-        )
-        ai_reply = chat_response.choices[0].message.content
-        st.markdown(f"**AI Coach Response:**\n\n{ai_reply}")
+    lower_question = user_input.lower()
+    if lower_question in demo_responses:
+        st.markdown(f"**AI Coach Response:**\n\n{demo_responses[lower_question]}")
+    else:
+        st.warning("Sorry, this demo only supports limited sample questions. Please try one of these:\n- How do I set up my first PPC campaign?\n- My RPC is low. What should I do?\n- What is scrub rate?")
