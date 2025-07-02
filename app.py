@@ -1,9 +1,8 @@
-
 import streamlit as st
-import openai
+from openai import OpenAI
 
-# Read API key from Streamlit Cloud Secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Load API Key from Streamlit Secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 system_prompt = """
 You are an AI-powered Freelance Media Buyer Coach for a PPC Arbitrage business.
@@ -23,12 +22,12 @@ user_input = st.text_input("Ask your question:")
 
 if user_input:
     with st.spinner("Thinking..."):
-        response = openai.ChatCompletion.create(
+        chat_response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_input}
             ]
         )
-        ai_reply = response['choices'][0]['message']['content']
+        ai_reply = chat_response.choices[0].message.content
         st.markdown(f"**AI Coach Response:**\n\n{ai_reply}")
