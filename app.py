@@ -88,4 +88,7 @@ if user_input:
     if lower_question in demo_responses:
         st.markdown(f"**AI Coach Response:**\n\n{demo_responses[lower_question]}")
     else:
-        st.warning("Sorry, this demo only supports limited sample questions. Please try one of these:\n- How do I set up my first PPC campaign?\n- My RPC is low. What should I do?\n- What is scrub rate?")
+        st.warning(
+    "Sorry, this demo only supports limited sample questions. Please try one of these:\n\n" +
+    "\n".join([f"- {q.capitalize()}" for q in demo_responses.keys()])
+)
